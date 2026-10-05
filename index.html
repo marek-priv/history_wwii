@@ -203,7 +203,7 @@
   <section class="card" id="screen-start">
     <div class="start-hero">
       <h2>II wojna światowa 1939–1945</h2>
-      <p>16 pytań sprawdzających wiedzę z całego działu — od września 1939 po konsekwencje wojny.</p>
+      <p>26 pytań sprawdzających wiedzę z całego działu — od września 1939 po konsekwencje wojny.</p>
     </div>
     <div class="modlist">
       <span>Wybuch wojny</span><span>Okupacja i terror</span><span>Polskie Państwo Podziemne</span>
@@ -460,6 +460,78 @@ const QUESTIONS = [
     ],
     a: 0,
     expl: "Niemcy podpisały bezwarunkową kapitulację 7–8 maja 1945 r. (w SSSR i Polsce obchodzone 9 maja). Wojna na Pacyfiku trwała do września: po bombardowaniach atomowych Hiroszimy i Nagasaki <b>Japonia skapitulowała 2 września 1945 r.</b> — to symboliczny koniec II wojny światowej."
+  },
+
+  /* ============ WAŻNE DATY ============ */
+  {
+    mod: "Ważne daty · Wybuch wojny",
+    q: "Kiedy podpisano pakt Ribbentrop–Mołotow?",
+    opts: ["1 września 1939 r.", "23 sierpnia 1939 r.", "17 września 1939 r.", "10 maja 1940 r."],
+    a: 1,
+    expl: "Pakt o nieagresji między Niemcami a ZSRR podpisano w Moskwie <b>23 sierpnia 1939 r.</b> — tydzień przed atakiem na Polskę. Tajny protokół dzielił Europę Wschodnią na strefy wpływów."
+  },
+  {
+    mod: "Ważne daty · Wybuch wojny",
+    q: "Ile dni trwała obrona Westerplatte we wrześniu 1939 r.?",
+    opts: ["3 dni", "7 dni", "14 dni", "21 dni"],
+    a: 1,
+    expl: "Westerplatte broniono od <b>1 do 7 września 1939 r.</b> — przez 7 dni ok. 200 żołnierzy stawiało opór przeważającym siłom niemieckim. Obrona stała się symbolem polskiego heroizmu; na Westerplatte stoi dziś Pomnik Obrońców Wybrzeża."
+  },
+  {
+    mod: "Ważne daty · Polskie Państwo Podziemne",
+    q: "Kiedy Związek Walki Zbrojnej przemianowano na Armię Krajową?",
+    opts: ["1 września 1939 r.", "14 lutego 1942 r.", "1 sierpnia 1944 r.", "27 września 1939 r."],
+    a: 1,
+    expl: "Rozkazem gen. Sikorskiego z <b>14 lutego 1942 r.</b> ZWZ przyjął nazwę <b>Armia Krajowa</b>. AK stała się największą konspiracyjną armią okupowanej Europy — w szczytowym momencie liczyła ok. 350–400 tys. żołnierzy. (Sam ZWZ powstał 27 września 1939 r.)"
+  },
+  {
+    mod: "Ważne daty · Polskie Państwo Podziemne",
+    q: "Kiedy harcerze Szarych Szeregów przeprowadzili „Akcję pod Arsenałem” — odbicie Jana Bytnara „Rudego”?",
+    opts: ["26 marca 1943 r.", "19 kwietnia 1943 r.", "1 sierpnia 1944 r.", "6 czerwca 1944 r."],
+    a: 0,
+    expl: "<b>26 marca 1943 r.</b> kilkudziesięciu harcerzy Szarych Szeregów odbiło w Alejach Szucha więźniów przewożonych na Pawiak, w tym Jana Bytnara „Rudego”. To jedna z najsłynniejszych akcji zbrojnych konspiracji — Rudy zmarł wkrótce po odbiciu, na skutek tortur."
+  },
+  {
+    mod: "Ważne daty · Okupacja i terror",
+    q: "Kiedy wyzwolono obóz koncentracyjny i zagłady Auschwitz-Birkenau?",
+    opts: ["8 maja 1945 r.", "27 stycznia 1945 r.", "22 lipca 1944 r.", "17 stycznia 1945 r."],
+    a: 1,
+    expl: "Żołnierze Armii Czerwonej wyzwolili KL Auschwitz <b>27 stycznia 1945 r.</b> W obozie zginęło ponad 1 mln osób, głównie Żydów. Od 2005 r. 27 stycznia to <b>Międzynarodowy Dzień Pamięci o Ofiarach Holokaustu</b>."
+  },
+  {
+    mod: "Ważne daty · Fronty świata",
+    q: "W którym roku toczyła się Bitwa o Anglię — powietrzna kampania Luftwaffe przeciw RAF?",
+    opts: ["1939", "1940", "1942", "1944"],
+    a: 1,
+    expl: "<b>Bitwa o Anglię</b> trwała od lipca do października <b>1940 r.</b> Była to pierwsza wielka kampania wojenna rozstrzygnięta wyłącznie w powietrzu. Zwycięstwo RAF udaremniło niemiecki plan inwazji na Wyspy („Seelöwe”) — i właśnie wtedy wsławił się polski Dywizjon 303."
+  },
+  {
+    mod: "Ważne daty · Fronty świata",
+    q: "Kiedy Japonia zaatakowała Pearl Harbor, wciągając USA do wojny na Pacyfiku?",
+    opts: ["6 czerwca 1944 r.", "22 czerwca 1941 r.", "7 grudnia 1941 r.", "8 maja 1945 r."],
+    a: 2,
+    expl: "Nalot na bazę <b>Pearl Harbor</b> (Hawaje) nastąpił <b>7 grudnia 1941 r.</b> Następnego dnia USA wypowiedziały wojnę Japonii, a kilka dni później Niemcy — USA. Wojna na Pacyfiku zakończyła się dopiero kapitulacją Japonii 2 września 1945 r."
+  },
+  {
+    mod: "Ważne daty · Polacy na frontach",
+    q: "Kiedy 2 Korpus Polski gen. Andersa zdobył klasztor na Monte Cassino?",
+    opts: ["6 czerwca 1944 r.", "18 maja 1944 r.", "17 września 1944 r.", "12 lutego 1944 r."],
+    a: 1,
+    expl: "Szturm na Monte Cassino zakończył się <b>18 maja 1944 r.</b> — Polacy zdobyli ruiny klasztoru benedyktynów po czterech wcześniejszych nieudanych alianckich ofensywach. W bitwie poległo ok. 1000 żołnierzy 2 Korpusu."
+  },
+  {
+    mod: "Ważne daty · Polacy na frontach",
+    q: "We wrześniu 1944 r. polska 1 Samodzielna Brygada Spadochronowa gen. Sosabowskiego wzięła udział w operacji Market Garden. Gdzie walczyła?",
+    opts: ["Pod Tobrukiem w Libii", "Pod Arnhem w Holandii", "Pod Narwikiem w Norwegii", "Pod Lenino na wschodzie"],
+    a: 1,
+    expl: "W dniach <b>17–26 września 1944 r.</b> alianci przeprowadzili operację <b>Market Garden</b> — największy desant spadochronowy wojny. Polska brygada desantowała pod <b>Arnhem</b>; operacja zakończyła się niepowodzeniem, a bitwę opisał film „O jeden most za daleko”."
+  },
+  {
+    mod: "Ważne daty · Koniec wojny",
+    q: "Kiedy odbyła się konferencja Wielkiej Trójki w Jałcie?",
+    opts: ["Listopad 1943 r.", "Luty 1945 r.", "Lipiec 1945 r.", "Wrzesień 1939 r."],
+    a: 1,
+    expl: "Konferencja jałtańska trwała <b>4–11 lutego 1945 r.</b> Kolejność konferencji Wielkiej Trójki: <b>Teheran</b> (listopad–grudzień 1943) → <b>Jałta</b> (luty 1945) → <b>Poczdam</b> (lipiec–sierpień 1945). W Jałcie ostatecznie przesądzono o przesunięciu granic Polski na zachód."
   }
 ];
 
