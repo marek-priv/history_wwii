@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Historyczny — II wojna światowa · klasa 8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f6fa;
+    --card: #ffffff;
+    --ink: #1a2333;
+    --ink-soft: #5b6577;
+    --ink-faint: #8a93a5;
+    --line: #e3e8f0;
+    --navy: #1f3864;
+    --navy-soft: #2c4a82;
+    --accent: #f59e0b;
+    --green: #16a34a;
+    --green-bg: #e7f6ec;
+    --red: #dc2626;
+    --red-bg: #fdecec;
+    --radius: 16px;
+    --shadow: 0 1px 3px rgba(20,30,60,.08), 0 10px 30px rgba(20,30,60,.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background:
+      radial-gradient(1200px 500px at 80% -10%, rgba(47,74,130,.10), transparent 60%),
+      radial-gradient(900px 400px at -10% 110%, rgba(245,158,11,.08), transparent 60%),
+      var(--bg);
+    color: var(--ink);
+    line-height: 1.5;
+    min-height: 100vh;
+    overflow-x: clip;
+    padding: 28px 16px 64px;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+
+  /* ---------- header ---------- */
+  .brand {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 18px;
+  }
+  .brand .logo {
+    width: 42px; height: 42px; border-radius: 12px; flex: none;
+    background: linear-gradient(135deg, var(--navy), var(--navy-soft));
+    color: #ffd27a; display: grid; place-items: center;
+    font-weight: 800; font-size: 19px;
+    box-shadow: 0 4px 14px rgba(31,56,100,.35);
+  }
+  .brand h1 { font-size: clamp(16px, 3.4vw, 20px); font-weight: 800; letter-spacing: .2px; }
+  .brand p { font-size: 12px; color: var(--ink-soft); font-weight: 500; }
+
+  /* ---------- card ---------- */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: clamp(18px, 4vw, 30px);
+    animation: rise .3s ease;
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+  /* ---------- progress ---------- */
+  .progress-top {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-size: 12px; font-weight: 700; color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .progress-top .mod { color: var(--navy); text-transform: uppercase; letter-spacing: .5px; font-size: 10.5px; }
+  .bar { height: 8px; background: #e9edf5; border-radius: 999px; overflow: hidden; margin-bottom: 20px; }
+  .bar i {
+    display: block; height: 100%; border-radius: 999px;
+    background: linear-gradient(90deg, var(--navy-soft), var(--accent));
+    width: 0; transition: width .35s ease;
+  }
+
+  /* ---------- question ---------- */
+  .q-text { font-size: clamp(16px, 3.6vw, 19px); font-weight: 700; line-height: 1.4; margin-bottom: 18px; }
+  .opts { display: grid; gap: 10px; }
+  .opt {
+    display: flex; align-items: center; gap: 12px; text-align: left;
+    border: 1.5px solid var(--line); border-radius: 12px;
+    background: #fbfcfe; padding: 13px 15px;
+    font: inherit; font-size: 14px; font-weight: 600; color: var(--ink);
+    cursor: pointer; transition: border-color .15s, background .15s, transform .12s;
+  }
+  .opt:hover:not(:disabled) { border-color: var(--navy-soft); background: #f2f6fd; transform: translateY(-1px); }
+  .opt:disabled { cursor: default; }
+  .opt .key {
+    flex: none; width: 28px; height: 28px; border-radius: 8px;
+    background: #e9edf5; color: var(--ink-soft);
+    display: grid; place-items: center; font-size: 12px; font-weight: 800;
+  }
+  .opt.correct { border-color: var(--green); background: var(--green-bg); }
+  .opt.correct .key { background: var(--green); color: #fff; }
+  .opt.wrong { border-color: var(--red); background: var(--red-bg); }
+  .opt.wrong .key { background: var(--red); color: #fff; }
+  .opt.dim { opacity: .55; }
+
+  /* ---------- explanation ---------- */
+  .expl {
+    margin-top: 16px; border-radius: 12px; overflow: hidden;
+    border: 1px solid var(--line); animation: rise .3s ease;
+  }
+  .expl .expl-head {
+    padding: 10px 15px; font-size: 12.5px; font-weight: 800;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .expl.ok .expl-head { background: var(--green-bg); color: var(--green); }
+  .expl.bad .expl-head { background: var(--red-bg); color: var(--red); }
+  .expl .expl-body {
+    padding: 12px 15px; font-size: 13px; color: var(--ink-soft); line-height: 1.55;
+    background: #fbfcfe;
+  }
+  .expl .expl-body b { color: var(--ink); }
+  .next-row { margin-top: 16px; display: flex; justify-content: flex-end; }
+
+  /* ---------- buttons ---------- */
+  .btn {
+    font: inherit; font-weight: 700; font-size: 14px; cursor: pointer;
+    border-radius: 10px; padding: 11px 20px; border: none;
+    transition: transform .12s, box-shadow .15s, background .15s;
+  }
+  .btn-primary { background: var(--navy); color: #fff; box-shadow: 0 4px 14px rgba(31,56,100,.30); }
+  .btn-primary:hover { background: var(--navy-soft); transform: translateY(-1px); }
+  .btn-ghost { background: #eef1f7; color: var(--ink); }
+  .btn-ghost:hover { background: #e3e8f2; }
+
+  /* ---------- start screen ---------- */
+  .start-hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 60%, #3d5a96 100%);
+    border-radius: 12px; color: #fff; padding: 22px; margin-bottom: 18px;
+  }
+  .start-hero h2 { font-size: clamp(18px, 4.4vw, 23px); font-weight: 800; }
+  .start-hero p { margin-top: 6px; font-size: 13px; color: #c9d6ef; }
+  .modlist { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 18px; }
+  .modlist span {
+    font-size: 11px; font-weight: 600; color: var(--ink-soft);
+    background: #eef1f7; border-radius: 999px; padding: 4px 11px;
+  }
+  .start-row { display: flex; justify-content: center; }
+
+  /* ---------- results ---------- */
+  .result-grid { display: grid; grid-template-columns: 130px 1fr; gap: 18px; align-items: center; }
+  .donut { position: relative; width: 130px; height: 130px; }
+  .donut svg { transform: rotate(-90deg); }
+  .donut .pct {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    flex-direction: column; text-align: center;
+  }
+  .donut .pct b { font-size: 26px; font-weight: 800; display: block; }
+  .donut .pct span { font-size: 11px; color: var(--ink-faint); font-weight: 600; }
+  .grade-badge {
+    display: inline-block; padding: 6px 16px; border-radius: 999px;
+    font-size: 15px; font-weight: 800; margin: 4px 0 8px;
+  }
+  .g6 { background: #eef0fe; color: #4f46e5; }
+  .g5 { background: var(--green-bg); color: var(--green); }
+  .g4 { background: #e3f3f7; color: #0e7490; }
+  .g3 { background: #fdf3e2; color: #b45309; }
+  .g2 { background: #fdeee3; color: #c2410c; }
+  .g1 { background: var(--red-bg); color: var(--red); }
+  .result-note { font-size: 13px; color: var(--ink-soft); margin-top: 4px; }
+  .result-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+
+  /* ---------- review ---------- */
+  .rev-item { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+  .rev-item .rq { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .rev-item .ra { font-size: 12.5px; margin: 3px 0; display: flex; gap: 8px; align-items: baseline; }
+  .rev-item .ra .tick { font-weight: 800; width: 16px; flex: none; }
+  .ra.good { color: var(--green); }
+  .ra.bad { color: var(--red); }
+  .rev-item .re { margin-top: 8px; font-size: 12px; color: var(--ink-soft); background: #fbfcfe; border-left: 3px solid var(--accent); padding: 8px 10px; border-radius: 0 8px 8px 0; }
+  .rev-num { font-size: 10.5px; font-weight: 800; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+
+  .hidden { display: none !important; }
+  footer { margin-top: 22px; text-align: center; font-size: 11px; color: var(--ink-faint); }
+
+  @media (max-width: 560px) {
+    body { padding: 16px 10px 48px; }
+    .result-grid { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+    .result-actions { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="brand">
+    <div class="logo">H</div>
+    <div>
+      <h1>Quiz Historyczny — II wojna światowa</h1>
+      <p>Historia · klasa 8 szkoły podstawowej · powtórka przed sprawdzianem</p>
+    </div>
+  </header>
+
+  <!-- ================= START ================= -->
+  <section class="card" id="screen-start">
+    <div class="start-hero">
+      <h2>II wojna światowa 1939–1945</h2>
+      <p>16 pytań sprawdzających wiedzę z całego działu — od września 1939 po konsekwencje wojny.</p>
+    </div>
+    <div class="modlist">
+      <span>Wybuch wojny</span><span>Okupacja i terror</span><span>Polskie Państwo Podziemne</span>
+      <span>Fronty świata</span><span>Polacy na frontach</span><span>Koniec wojny i skutki</span>
+    </div>
+    <div class="start-row">
+      <button class="btn btn-primary" id="btn-start">Rozpocznij quiz →</button>
+    </div>
+  </section>
+
+  <!-- ================= QUIZ ================= -->
+  <section class="card hidden" id="screen-quiz">
+    <div class="progress-top">
+      <span class="mod" id="q-mod"></span>
+      <span id="q-count"></span>
+    </div>
+    <div class="bar"><i id="q-bar"></i></div>
+    <div class="q-text" id="q-text"></div>
+    <div class="opts" id="q-opts"></div>
+    <div id="q-expl"></div>
+    <div class="next-row hidden" id="q-nextrow">
+      <button class="btn btn-primary" id="btn-next">Następne pytanie →</button>
+    </div>
+  </section>
+
+  <!-- ================= RESULTS ================= -->
+  <section class="card hidden" id="screen-result">
+    <h2 style="font-size:20px;font-weight:800;margin-bottom:16px">Twój wynik</h2>
+    <div class="result-grid">
+      <div class="donut">
+        <svg width="130" height="130">
+          <circle cx="65" cy="65" r="56" fill="none" stroke="#e9edf5" stroke-width="12"/>
+          <circle id="donut-arc" cx="65" cy="65" r="56" fill="none" stroke="#16a34a" stroke-width="12"
+                  stroke-linecap="round" stroke-dasharray="351.9" stroke-dashoffset="351.9"/>
+        </svg>
+        <div class="pct"><b id="res-pct">0%</b><span id="res-pts"></span></div>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.5px">Ocena szkolna</div>
+        <span class="grade-badge g3" id="res-grade">—</span>
+        <div class="result-note" id="res-note"></div>
+      </div>
+    </div>
+    <div class="result-actions">
+      <button class="btn btn-primary" id="btn-restart">Spróbuj ponownie</button>
+      <button class="btn btn-ghost" id="btn-review">Przegląd odpowiedzi</button>
+    </div>
+  </section>
+
+  <!-- ================= REVIEW ================= -->
+  <section class="card hidden" id="screen-review">
+    <h2 style="font-size:20px;font-weight:800;margin-bottom:4px">Przegląd odpowiedzi</h2>
+    <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:16px" id="rev-sub"></p>
+    <div id="rev-list"></div>
+    <div class="result-actions">
+      <button class="btn btn-primary" id="btn-again">Spróbuj ponownie</button>
+      <button class="btn btn-ghost" id="btn-back">Wróć do wyniku</button>
+    </div>
+  </section>
+
+  <footer>Materiał edukacyjny · powtórka do działu „II wojna światowa”</footer>
+</div>
+
+<script>
+const QUESTIONS = [
+  {
+    mod: "Wybuch wojny",
+    q: "Kiedy wybuchła II wojna światowa?",
+    opts: [
+      "1 września 1939 r. — atak Niemiec na Polskę",
+      "17 września 1939 r. — atak ZSRR na Polskę",
+      "3 września 1939 r. — wypowiedzenie wojny Niemcom przez Wielką Brytanię",
+      "22 czerwca 1941 r. — atak Niemiec na ZSRR"
+    ],
+    a: 0,
+    expl: "<b>1 września 1939 r.</b> o godz. 4:45 pancernik „Schleswig-Holstein” ostrzelał Westerplatte, a wojska niemieckie przekroczyły polską granicę. 17 września Polskę zaatakował ZSRR, a 3 września Wielka Brytania i Francja wypowiedziały wojnę Niemcom — nie przeprowadziły jednak realnych działań zbrojnych („dziwna wojna”)."
+  },
+  {
+    mod: "Wybuch wojny",
+    q: "Jakie żądania Niemcy przedstawili Polsce jesienią 1938 r. i wiosną 1939 r.?",
+    opts: [
+      "Zwrot Śląska i południowej Wielkopolski",
+      "Włączenie Gdańska do Rzeszy i eksterytorialna droga przez Pomorze",
+      "Odstąpienie Krakowa i Lwowa w zamian za sojusz",
+      "Wypowiedzenie paktu z Francją bez żądań terytorialnych"
+    ],
+    a: 1,
+    expl: "Niemcy żądały <b>włączenia Wolnego Miasta Gdańska do Rzeszy</b> oraz budowy eksterytorialnej autostrady i linii kolejowej przez Pomorze („korytarz”). Polska odrzuciła żądania — stały się one pretekstem do agresji."
+  },
+  {
+    mod: "Wybuch wojny",
+    q: "Co przewidywał tajny protokół do paktu Ribbentrop–Mołotow z 23 sierpnia 1939 r.?",
+    opts: [
+      "Wzajemną pomoc wojskową Niemiec i ZSRR na wypadek ataku aliantów",
+      "Podział Polski i Europy Wschodniej na niemiecką i sowiecką strefę wpływów",
+      "Wspólną okupację Czechosłowacji i Węgier",
+      "Zobowiązanie ZSRR do dostaw broni dla Francji"
+    ],
+    a: 1,
+    expl: "Pakt o nieagresji zawierał <b>tajny protokół</b> dzielący Europę Wschodnią na strefy wpływów: Polska wzdłuż linii Narwi, Wisły i Sanu, a także Finlandia, państwa bałtyckie i Besarabia miały przypaść ZSRR. Istnienie protokołu ZSRR zaprzeczał przez dziesięciolecia."
+  },
+  {
+    mod: "Wybuch wojny",
+    q: "Co wydarzyło się 17 września 1939 r.?",
+    opts: [
+      "Kapitulacja Warszawy",
+      "Wybuch powstania w getcie warszawskim",
+      "Agresja ZSRR na Polskę",
+      "Utworzenie rządu gen. Sikorskiego na uchodźstwie"
+    ],
+    a: 2,
+    expl: "<b>17 września 1939 r. Armia Czerwona wkroczyła do Polski</b>, realizując tajny protokół paktu Ribbentrop–Mołotow. Sowieci tłumaczyli agresję „obroną ludności” po rzekomym upadku państwa polskiego. Tego dnia władze RP ewakuowały się do Rumunii."
+  },
+  {
+    mod: "Okupacja i terror",
+    q: "Czym był Holokaust (Zagłada)?",
+    opts: [
+      "Masowe wysiedlenia Polaków z ziem wcielonych do Rzeszy",
+      "Planowa, prowadzona przez Niemcy eksterminacja Żydów europejskich",
+      "Seria nalotów dywanowych na miasta niemieckie",
+      "Radziecki system obozów pracy na Syberii"
+    ],
+    a: 1,
+    expl: "<b>Holokaust (Zagłada, Shoah)</b> to zorganizowana przez nazistowskie Niemcy zagłada ok. 6 mln Żydów. Symbolem stał się obóz Auschwitz-Birkenau, w którym zamordowano ponad milion osób. Akcja eksterminacyjna nosiła nazwę „Aktion Reinhardt”."
+  },
+  {
+    mod: "Okupacja i terror",
+    q: "Na czym polegała akcja „Intelligenzaktion” prowadzona przez Niemców w okupowanej Polsce?",
+    opts: [
+      "Masowe mordy polskich inteligentów, nauczycieli i duchownych",
+      "Werbowanie Polaków do pracy w niemieckim wywiadzie",
+      "Tworzenie tajnych szkół wyższych dla okupantów",
+      "Grabież polskich dzieł sztuki do zbiorów Rzeszy"
+    ],
+    a: 0,
+    expl: "<b>Intelligenzaktion</b> to planowa eksterminacja polskich elit — nauczycieli, profesorów, urzędników, duchownych — mająca pozbawić naród przywództwa. Najsłynniejszą egzekucją było mordowanie w Lasach Piaśnickich i na Wzgórzach Krzemionkowskich."
+  },
+  {
+    mod: "Polskie Państwo Podziemne",
+    q: "Które stwierdzenie o Polskim Państwie Podziemnym jest prawdziwe?",
+    opts: [
+      "Działało wyłącznie jako organizacja sabotażowa bez struktur cywilnych",
+      "Miało własny parlament, sądy, szkoły i armię (AK), podporządkowane rządowi na uchodźstwie",
+      "Powstało dopiero w 1944 r. przed Powstaniem Warszawskim",
+      "Było kierowane przez komunistów z KPP"
+    ],
+    a: 1,
+    expl: "<b>Polskie Państwo Podziemne</b> było zjawiskiem unikalnym w Europie — miało struktury cywilne (Delegatura Rządu na Kraj, tajne sądy, podziemna oświata) i wojskowe (ZWZ, od 1942 r. <b>Armia Krajowa</b>). Lojalność składało legalnemu rządowi RP na uchodźstwie."
+  },
+  {
+    mod: "Polskie Państwo Podziemne",
+    q: "„Szare Szeregi” to konspiracyjna nazwa…",
+    opts: [
+      "sztabu Armii Krajowej",
+      "Związku Harcerstwa Polskiego w konspiracji",
+      "tajnej sieci kurierów do Londynu",
+      "podziemnego wydawnictwa „Biuletyn Informacyjny”"
+    ],
+    a: 1,
+    expl: "<b>Szare Szeregi</b> to kryptonim konspiracyjnego ZHP. Harcerze prowadzili tajne nauczanie, kolportaż prasy i akcje „małego sabotażu” (malowanie znaków Polski Walczącej). Głośną akcją starszych harcerek i harcerzy była „Akcja pod Arsenałem” (1943) — odbicie Jana Bytnara „Rudego”."
+  },
+  {
+    mod: "Fronty świata",
+    q: "Co oznaczał kryptonim „Barbarossa”?",
+    opts: [
+      "Niemiecki plan inwazji na Francję z 1940 r.",
+      "Niemiecki plan ataku na ZSRR, zrealizowany 22 czerwca 1941 r.",
+      "Aliancki plan desantu w Normandii",
+      "Włoski plan podboju Afryki Północnej"
+    ],
+    a: 1,
+    expl: "<b>Plan Barbarossa</b> to niemiecka inwazja na ZSRR rozpoczęta <b>22 czerwca 1941 r.</b> — największa operacja lądowa w historii. Początkowo Niemcy odnosili ogromne sukcesy, ale nie zdobyli Moskwy przed zimą, a wojna stała się wojną na wyczerpanie."
+  },
+  {
+    mod: "Fronty świata",
+    q: "Która bitwa uznawana jest za przełom na froncie wschodnim, a klęskę Niemców zakończyła kapitulacją 6. armii?",
+    opts: [
+      "Bitwa pod Moskwą",
+      "Bitwa o Anglię",
+      "Bitwa stalingradzka (1942–1943)",
+      "Bitwa pod El-Alamein"
+    ],
+    a: 2,
+    expl: "<b>Stalingrad</b> (sierpień 1942 – luty 1943): wojska sowieckie otoczyły i zniszczyły 6. armię gen. Paulusa — ok. 300 tys. żołnierzy, w tym ponad 90 tys. jeńców. Po Stalingradzie i bitwie na Łuku Kurskim (1943) inicjatywa na Wschodzie przeszła na stronę ZSRR."
+  },
+  {
+    mod: "Fronty świata",
+    q: "Czym była operacja „Overlord” z 6 czerwca 1944 r. (D-Day)?",
+    opts: [
+      "Alianckim desantem w Normandii — otwarciem frontu zachodniego",
+      "Niemiecką kontrofensywą w Ardenach",
+      "Zbombardowaniem Drezna",
+      "Radziecką ofensywą „Bagration”"
+    ],
+    a: 0,
+    expl: "<b>6 czerwca 1944 r. (D-Day)</b> alianci wylądowali na plażach Normandii — największa operacja desantowa wojny. Otworzyła drugi front w Europie i zmusiła Niemcy do walki na dwa fronty. Około rok później Rzesza skapitulowała."
+  },
+  {
+    mod: "Polacy na frontach",
+    q: "Czym zasłynął polski 303 Dywizjon Myśliwski im. Kościuszki?",
+    opts: [
+      "Zdobyciem klasztoru na Monte Cassino",
+      "Największą liczbą zestrzeleń w Bitwie o Anglię",
+      "Desantem spadochronowym pod Arnhem",
+      "Wyzwoleniem Bredy w Holandii"
+    ],
+    a: 1,
+    expl: "<b>Dywizjon 303</b> (dowódca eskadry: mjr Zdzisław Krasnodębski) zestrzelił 126 samolotów niemieckich w Bitwie o Anglię — najwięcej spośród wszystkich dywizjonów RAF. Polscy lotnicy walczyli też w dywizjonach 302, 316, 317 i 318."
+  },
+  {
+    mod: "Polacy na frontach",
+    q: "Z jaką bitwą z 1944 r. wiąże się najsłynniejszy sukces 2 Korpusu Polskiego gen. Władysława Andersa?",
+    opts: [
+      "Bitwa pod Narwikiem",
+      "Bitwa o Monte Cassino we Włoszech",
+      "Bitwa pod Falaise",
+      "Bitwa pod Lenino"
+    ],
+    a: 1,
+    expl: "W maju 1944 r. <b>2 Korpus Polski zdobył klasztor na Monte Cassino</b> — kluczowy punkt Linii Gustawa. W bitwie poległo ok. 1000 Polaków. Nad ruinami klasztoru wywieszono biało-czerwoną flagę, a na cmentarzu wykuto słowa z epitafium: „Przechodniu, powiedz Polsce, iż polegliśmy wierni w jej służbie”."
+  },
+  {
+    mod: "Koniec wojny i skutki",
+    q: "Powstanie Warszawskie wybuchło 1 sierpnia 1944 r. Kto był jego głównym wykonawcą i ile trwało?",
+    opts: [
+      "Armia Ludowa — 27 dni",
+      "Armia Krajowa — 63 dni",
+      "Żydowska Organizacja Bojowa — 28 dni",
+      "Oddziały partyzanckie NSZ — 45 dni"
+    ],
+    a: 1,
+    expl: "<b>Powstanie Warszawskie</b> (1 VIII – 3 X 1944) prowadziła <b>Armia Krajowa</b> na rozkaz rządu RP — przez <b>63 dni</b> walczono o wyzwolenie stolicy przed wkroczeniem Armii Czerwonej, która bezczynnie stała na prawym brzegu Wisły. Poległo ok. 150–200 tys. cywilów; Niemcy niemal całkowicie zniszczyli miasto."
+  },
+  {
+    mod: "Koniec wojny i skutki",
+    q: "Na konferencjach Wielkiej Trójki (Teheran 1943, Jałta 1945) ustalono m.in.:",
+    opts: [
+      "Podział Niemiec na 16 landów",
+      "Powojenne granice Polski i strefy wpływów — przesunięcie Polski na zachód",
+      "Odszkodowania dla Japonii",
+      "Dziesięcioletnią okupację Francji"
+    ],
+    a: 1,
+    expl: "W <b>Teheranie i Jałcie</b> (Roosevelt, Churchill, Stalin) ustalono los powojennej Europy: Polska miała stracić ziemie wschodnie na rzecz ZSRR i uzyskać ziemie zachodnie i północne — bez udziału przedstawicieli polskiego rządu. Na <b>Poczdamie</b> (1945) doprecyzowano granicę na Odrze i Nysie Łużyckiej."
+  },
+  {
+    mod: "Koniec wojny i skutki",
+    q: "Kiedy zakończyła się II wojna światowa w Europie, a kiedy na świecie?",
+    opts: [
+      "8 maja 1945 — kapitulacja Niemiec; 2 września 1945 — kapitulacja Japonii",
+      "1 września 1945 — kapitulacja Włoch; 6 sierpnia 1945 — Hiroszima",
+      "30 kwietnia 1945 — śmierć Hitlera; 8 maja 1945 — koniec na wszystkich frontach",
+      "9 maja 1945 — kapitulacja Japonii; 2 września — konferencja poczdamska"
+    ],
+    a: 0,
+    expl: "Niemcy podpisały bezwarunkową kapitulację 7–8 maja 1945 r. (w SSSR i Polsce obchodzone 9 maja). Wojna na Pacyfiku trwała do września: po bombardowaniach atomowych Hiroszimy i Nagasaki <b>Japonia skapitulowała 2 września 1945 r.</b> — to symboliczny koniec II wojny światowej."
+  }
+];
+
+const GRADES = [
+  { min: 100, label: "celujący (6)", cls: "g6", note: "Perfekcyjnie! Wiedza na najwyższym poziomie." },
+  { min: 90,  label: "bardzo dobry (5)", cls: "g5", note: "Świetny wynik — tylko drobne potknięcia." },
+  { min: 75,  label: "dobry (4)", cls: "g4", note: "Solidna wiedza, warto powtórzyć szczegóły." },
+  { min: 50,  label: "dostateczny (3)", cls: "g3", note: "Podstawy są, ale przeczytaj wyjaśnienia i powtórz materiał." },
+  { min: 35,  label: "dopuszczający (2)", cls: "g2", note: "Dużo do nadrobienia — sięgnij po podręcznik i spróbuj jeszcze raz." },
+  { min: 0,   label: "niedostateczny (1)", cls: "g1", note: "Nie poddawaj się! Powtórz materiał i spróbuj ponownie." }
+];
+
+const $ = id => document.getElementById(id);
+const screens = { start: $("screen-start"), quiz: $("screen-quiz"), result: $("screen-result"), review: $("screen-review") };
+const KEYS = ["A", "B", "C", "D"];
+
+let idx = 0, score = 0, answers = []; // answers[i] = chosen option index
+
+function show(name) {
+  Object.values(screens).forEach(s => s.classList.add("hidden"));
+  screens[name].classList.remove("hidden");
+  screens[name].style.animation = "none";
+  void screens[name].offsetWidth;
+  screens[name].style.animation = "";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[idx];
+  $("q-mod").textContent = q.mod;
+  $("q-count").textContent = `Pytanie ${idx + 1} z ${QUESTIONS.length}`;
+  $("q-bar").style.width = `${(idx / QUESTIONS.length) * 100}%`;
+  $("q-text").textContent = q.q;
+  $("q-expl").innerHTML = "";
+  $("q-nextrow").classList.add("hidden");
+  $("btn-next").textContent = idx === QUESTIONS.length - 1 ? "Zobacz wynik →" : "Następne pytanie →";
+
+  $("q-opts").innerHTML = q.opts.map((o, i) =>
+    `<button class="opt" data-i="${i}"><span class="key">${KEYS[i]}</span><span>${o}</span></button>`
+  ).join("");
+  $("q-opts").querySelectorAll(".opt").forEach(b =>
+    b.addEventListener("click", () => pick(+b.dataset.i)));
+}
+
+function pick(i) {
+  const q = QUESTIONS[idx];
+  answers[idx] = i;
+  const ok = i === q.a;
+  if (ok) score++;
+  $("q-opts").querySelectorAll(".opt").forEach((b, j) => {
+    b.disabled = true;
+    if (j === q.a) b.classList.add("correct");
+    else if (j === i) b.classList.add("wrong");
+    else b.classList.add("dim");
+  });
+  $("q-bar").style.width = `${((idx + 1) / QUESTIONS.length) * 100}%`;
+  $("q-expl").innerHTML = `
+    <div class="expl ${ok ? "ok" : "bad"}">
+      <div class="expl-head">${ok ? "✔ Dobrze!" : "✘ Niestety — poprawna odpowiedź to " + KEYS[q.a]}</div>
+      <div class="expl-body"><b>Ciekawostka:</b> ${q.expl}</div>
+    </div>`;
+  $("q-nextrow").classList.remove("hidden");
+  $("q-expl").scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+function gradeFor(pct) {
+  return GRADES.find(g => pct >= g.min);
+}
+
+function showResults() {
+  const pct = Math.round((score / QUESTIONS.length) * 100);
+  const g = gradeFor(pct);
+  $("res-pct").textContent = pct + "%";
+  $("res-pts").textContent = `${score}/${QUESTIONS.length} punktów`;
+  const badge = $("res-grade");
+  badge.textContent = g.label;
+  badge.className = "grade-badge " + g.cls;
+  $("res-note").textContent = g.note;
+  const arc = $("donut-arc");
+  const circ = 2 * Math.PI * 56;
+  arc.style.strokeDasharray = circ;
+  arc.style.stroke = pct >= 50 ? "#16a34a" : pct >= 35 ? "#f59e0b" : "#dc2626";
+  arc.style.transition = "none";
+  arc.style.strokeDashoffset = circ;
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    arc.style.transition = "stroke-dashoffset .9s ease";
+    arc.style.strokeDashoffset = circ * (1 - pct / 100);
+  }));
+  show("result");
+}
+
+function renderReview() {
+  $("rev-sub").textContent = `Twój wynik: ${score}/${QUESTIONS.length} — kliknij „Spróbuj ponownie”, aby zagrać jeszcze raz.`;
+  $("rev-list").innerHTML = QUESTIONS.map((q, i) => {
+    const you = answers[i];
+    const good = you === q.a;
+    return `<div class="rev-item">
+      <div class="rev-num">Pytanie ${i + 1} · ${q.mod}</div>
+      <div class="rq">${q.q}</div>
+      <div class="ra ${good ? "good" : "bad"}"><span class="tick">${good ? "✔" : "✘"}</span>
+        <span>Twoja odpowiedź: <b>${you !== undefined ? q.opts[you] : "brak"}</b></span></div>
+      ${good ? "" : `<div class="ra good"><span class="tick">✔</span><span>Poprawna: <b>${q.opts[q.a]}</b></span></div>`}
+      <div class="re">${q.expl}</div>
+    </div>`;
+  }).join("");
+  show("review");
+}
+
+function restart() {
+  idx = 0; score = 0; answers = [];
+  renderQuestion();
+  show("quiz");
+}
+
+$("btn-start").addEventListener("click", restart);
+$("btn-next").addEventListener("click", () => {
+  if (idx < QUESTIONS.length - 1) { idx++; renderQuestion(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+  else showResults();
+});
+$("btn-restart").addEventListener("click", restart);
+$("btn-again").addEventListener("click", restart);
+$("btn-review").addEventListener("click", renderReview);
+$("btn-back").addEventListener("click", () => show("result"));
+</script>
+</body>
+</html>
